@@ -1,0 +1,54 @@
+.shipping{
+    border: 3px solid red;
+    padding: 20px;
+    width: 630px;
+    border-radius: 7px;
+}
+
+.billing{
+    border: 3px solid red;
+    padding: 20px;
+    width: 630px;
+    border-radius: 7px;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+.form-section{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+label{
+    font-weight: 600;
+    font-size: 17px;
+    
+}
+input{
+    width: 100%;
+    height: 25px;
+
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border-radius: 3px;
+}
+.check{
+    width:13px;
+    height:13px;
+    margin-left: 5px;
+}
+input::placeholder{
+    padding-left: 5px;
+}
+h2{
+    margin-bottom: 10px;
+    color: aqua;
+}
+h3{
+    text-align: center;
+    font-size: 25px;
+    margin: 15px 0px;
+}
