@@ -1,6 +1,7 @@
 {
   "products": [
     {
+      
       "availableSizes": ["S", "XS"],
       "currencyFormat": "$",
       "currencyId": "USD",
