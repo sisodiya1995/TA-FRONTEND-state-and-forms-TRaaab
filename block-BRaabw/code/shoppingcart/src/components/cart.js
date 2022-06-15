@@ -1,8 +1,9 @@
 import React from "react";
+import data from "../data.json";
 class Cart extends React.Component {
   constructor() {
     super();
-    this.state = { isDisplay: false };
+    this.state = { isDisplay: false, increment: false };
   }
 
   handleClick = () => {
@@ -16,7 +17,32 @@ class Cart extends React.Component {
       isDisplay: false,
     });
   };
+  handleInc = (event) => {
+    console.log(event.target.id, "id");
+    let id = event.target.id;
+    let singleProduct = data.products.filter((p) => p.id == id);
+    singleProduct[0].Qty = singleProduct[0].Qty + 1;
+    console.log(singleProduct[0].Qty);
+    this.setState({
+      increment: true,
+    });
+  };
+
+  handleDec = (event) => {
+    console.log(event.target.id, "id");
+    let id = event.target.id;
+    let singleProduct = data.products.filter((p) => p.id == id);
+    if(singleProduct[0].Qty > 1){
+      singleProduct[0].Qty = singleProduct[0].Qty - 1;
+    }
+   
+   // console.log(singleProduct[0].Qty);
+    this.setState({
+      increment: true,
+    });
+  };
   render() {
+    console.log([...new Set(this.props.info)], "info");
     return (
       <div className="carts">
         <>
@@ -30,7 +56,9 @@ class Cart extends React.Component {
                 className="cart-logo"
               />
 
-              <span className="items">{this.props.info.length}</span>
+              <span className="items">
+                {[...new Set(this.props.info)].length}
+              </span>
             </div>
           ) : (
             <div className="cart-products">
@@ -41,7 +69,7 @@ class Cart extends React.Component {
                 </button>
               </div>
 
-              {this.props.info.map((p) => {
+              {[...new Set(this.props.info)].map((p) => {
                 return (
                   <>
                     <div className="cartitem">
@@ -58,7 +86,20 @@ class Cart extends React.Component {
                       <p>
                         {p.currencyFormat} {p.price}
                       </p>
-                      <p>Qty : 1</p>
+                      {this.state.increment === true ? (
+                        <p>Qty:{p.Qty}</p>
+                      ) : (
+                        <p>Qty:{p.Qty}</p>
+                      )}
+                      {/* <p>Qty :{p.Qty}</p> */}
+                      <button className="qty-btn" id={p.id} onClick={this.handleInc}>
+                        {" "}
+                        +{" "}
+                      </button>
+                      <button id={p.id} className="qty-btn" onClick={this.handleDec}>
+                        {" "}
+                        -{" "}
+                      </button>
                     </div>
                   </>
                 );
@@ -66,8 +107,8 @@ class Cart extends React.Component {
 
               <p className="total">
                 SubTotal :{" "}
-                {this.props.info.reduce((acc, cv) => {
-                  acc = acc + cv.price;
+                {[...new Set(this.props.info)].reduce((acc, cv) => {
+                  acc = acc + cv.price * cv.Qty;
                   return acc;
                 }, 0)}
               </p>

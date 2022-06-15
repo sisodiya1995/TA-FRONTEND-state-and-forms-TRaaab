@@ -25,11 +25,16 @@ class Products extends React.Component {
     let productId = event.target.id;
     console.log(productId);
     let singleProduct = data.products.filter((p) => p.title === productId);
-    console.log(singleProduct, "product");
+   
+
+   // console.log(singleProduct[0].Qty =1,singleProduct, "product");
+     singleProduct[0].Qty = 1
+    // let filterP = singleProduct.filter((p,i) =>singleProduct.includes(p) === i)
+    // console.log(filterP ,"filerp")
     this.setState({
       cart: this.state.cart.concat(singleProduct),
     });
-    console.log(this.state.cart, "cart");
+    //console.log(this.state.cart, "cart");
   };
   orderChange = (event) => {
     console.log(event.target.value);
@@ -124,39 +129,5 @@ class Products extends React.Component {
   }
 }
 
-// class Product extends React.Component {
-//      constructor(props){
-//         super(props)
-//         this.state ={
-//             Cart :[]
-//         }
-//      }
-//     handlecart=(event)=>{
-//        let productId = event.target.id;
-//        console.log(productId)
-//        console.log(data.products.filter((p) => p.title === productId) ,"data")
-//         this.setState({
-//             Cart :this.state.Cart.push(data.products.filter((p) => p.title === productId))
-//         })
-//       }
-//   render() {
-//     return (
-//       <>
 
-//         <figure>
-//           <img
-//             src={`/static/products/` + `${this.props.sku}` + `_1.jpg`}
-//             alt="img"
-//           />
-//         </figure>
-
-//         <p>{this.props.title}</p>
-//         <p>
-//           {this.props.currencyFormat} {this.props.price}
-//         </p>
-//         <button id={this.props.title} onClick={(event) =>{this.handlecart(event)}}>Add to Cart</button>
-//       </>
-//     );
-//   }
-// }
 export default Products;
