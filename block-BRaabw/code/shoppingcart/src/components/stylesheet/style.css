@@ -172,3 +172,7 @@ small{
     font-weight: 800;
     margin-left: 5px;
 }
+.black{
+    background-color: black;
+    color: white;
+}

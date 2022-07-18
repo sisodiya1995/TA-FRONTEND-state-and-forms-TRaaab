@@ -1,75 +1,70 @@
 import React from "react";
-import data from "../data.json";
-class Cart extends React.Component {
-  constructor() {
-    super();
-    this.state = { isDisplay: false, increment: false };
+//import data from "../data.json";
+import { useState } from "react";
+
+//Using function component and hooks
+function Cart(props) {
+  let [isDisplay, setisDisplay] = useState(false);
+  let [isQtyChange, handleChange] = useState(false);
+  let [carts, setCart] = useState([]);
+  
+  function handleClick() {
+    setisDisplay(true);
+    setCart(props.info);
   }
 
-  handleClick = () => {
-    this.setState({
-      isDisplay: true,
-    });
-  };
+  function handleRemove() {
+    setisDisplay(false);
+    handleChange(false);
+  }
 
-  handleRemove = () => {
-    this.setState({
-      isDisplay: false,
-    });
-  };
-  handleInc = (event) => {
-    console.log(event.target.id, "id");
+  function handleInc(event) {
     let id = event.target.id;
-    let singleProduct = data.products.filter((p) => p.id == id);
+    let singleProduct = props.info.filter((p) => p.id == id);
     singleProduct[0].Qty = singleProduct[0].Qty + 1;
-    console.log(singleProduct[0].Qty);
-    this.setState({
-      increment: true,
-    });
-  };
+    // console.log(singleProduct[0].Qty,"+");
+    handleChange(true);
+    setCart([...carts, singleProduct[0]]);
+    
+  }
 
-  handleDec = (event) => {
-    console.log(event.target.id, "id");
+  function handleDec(event) {
     let id = event.target.id;
-    let singleProduct = data.products.filter((p) => p.id == id);
-    if(singleProduct[0].Qty > 1){
+    let singleProduct = props.info.filter((p) => p.id == id);
+    if (singleProduct[0].Qty > 1) {
       singleProduct[0].Qty = singleProduct[0].Qty - 1;
     }
-   
-   // console.log(singleProduct[0].Qty);
-    this.setState({
-      increment: true,
-    });
-  };
-  render() {
-    console.log([...new Set(this.props.info)], "info");
-    return (
+    // console.log(singleProduct[0].Qty, "-");
+    setCart([...carts, singleProduct[0]]);
+    handleChange(true);
+  }
+
+  return (
+    <>
       <div className="carts">
         <>
-          {this.state.isDisplay === false ? (
+          {isDisplay === false ? (
             <div>
               <img
-                onClick={this.handleClick}
+                onClick={handleClick}
                 style={{ backgroundColor: "black" }}
                 src="/static/bag-icon.png"
                 alt="cart-img"
                 className="cart-logo"
               />
 
-              <span className="items">
-                {[...new Set(this.props.info)].length}
-              </span>
+              <span className="items">{[...new Set(props.info)].length}</span>
             </div>
           ) : (
             <div className="cart-products">
               <div className="summary-title">
                 <small>Shopping Summary</small>
-                <button className="btn-4" onClick={this.handleRemove}>
+                <button className="btn-4" onClick={handleRemove}>
                   X
                 </button>
               </div>
 
-              {[...new Set(this.props.info)].map((p) => {
+              {[...new Set(carts)].map((p) => {
                 return (
                   <>
                     <div className="cartitem">
@@ -81,24 +76,22 @@ class Cart extends React.Component {
                         />
                       </figure>
 
-                      <p>{p.title}</p>
-                      <p>{p.availableSizes}</p>
+                      <p>Title : {p.title}</p>
+                      <p>Sizes :{p.availableSizes}</p>
                       <p>
-                        {p.currencyFormat} {p.price}
+                        Price :{p.currencyFormat} {p.price}
                       </p>
-                      {this.state.increment === true ? (
-                        <p>Qty:{p.Qty}</p>
+                      {isQtyChange === true ? (
+                        <p>Qty : {p.Qty}</p>
                       ) : (
-                        <p>Qty:{p.Qty}</p>
+                        <p>Qty : {p.Qty}</p>
                       )}
-                      {/* <p>Qty :{p.Qty}</p> */}
-                      <button className="qty-btn" id={p.id} onClick={this.handleInc}>
-                        {" "}
-                        +{" "}
+                     
+                      <button className="qty-btn" id={p.id} onClick={handleInc}>
+                        +
                       </button>
-                      <button id={p.id} className="qty-btn" onClick={this.handleDec}>
-                        {" "}
-                        -{" "}
+                      <button id={p.id} className="qty-btn" onClick={handleDec}>
+                        -
                       </button>
                     </div>
                   </>
@@ -107,7 +100,7 @@ class Cart extends React.Component {
 
               <p className="total">
                 SubTotal :{" "}
-                {[...new Set(this.props.info)].reduce((acc, cv) => {
+                {[...new Set(props.info)].reduce((acc, cv) => {
                   acc = acc + cv.price * cv.Qty;
                   return acc;
                 }, 0)}
@@ -116,7 +109,132 @@ class Cart extends React.Component {
           )}
         </>
       </div>
-    );
-  }
+    </>
+  );
 }
+
+// 2- Using class component
+
+// class Cart extends React.Component {
+//   constructor() {
+//     super();
+//     this.state = { isDisplay: false, increment: false };
+//   }
+
+//   handleClick = () => {
+//     this.setState({
+//       isDisplay: true,
+//     });
+//   };
+
+//   handleRemove = () => {
+//     this.setState({
+//       isDisplay: false,
+//     });
+//   };
+
+//   handleInc = (event) => {
+//     console.log(event.target.id, "id");
+//     let id = event.target.id;
+//     let singleProduct = data.products.filter((p) => p.id == id);
+//     singleProduct[0].Qty = singleProduct[0].Qty + 1;
+//     console.log(singleProduct[0].Qty);
+//     this.setState({
+//       increment: true,
+//     });
+//   };
+
+//   handleDec = (event) => {
+//     console.log(event.target.id, "id");
+//     let id = event.target.id;
+//     let singleProduct = data.products.filter((p) => p.id == id);
+//     if(singleProduct[0].Qty > 1){
+//       singleProduct[0].Qty = singleProduct[0].Qty - 1;
+//     }
+
+//    // console.log(singleProduct[0].Qty);
+//     this.setState({
+//       increment: true,
+//     });
+//   };
+//   render() {
+//     console.log([...new Set(this.props.info)], "info");
+//     return (
+//       <div className="carts">
+//         <>
+//           {this.state.isDisplay === false ? (
+//             <div>
+//               <img
+//                 onClick={this.handleClick}
+//                 style={{ backgroundColor: "black" }}
+//                 src="/static/bag-icon.png"
+//                 alt="cart-img"
+//                 className="cart-logo"
+//               />
+
+//               <span className="items">
+//                 {[...new Set(this.props.info)].length}
+//               </span>
+//             </div>
+//           ) : (
+//             <div className="cart-products">
+//               <div className="summary-title">
+//                 <small>Shopping Summary</small>
+//                 <button className="btn-4" onClick={this.handleRemove}>
+//                   X
+//                 </button>
+//               </div>
+
+//               {[...new Set(this.props.info)].map((p) => {
+//                 return (
+//                   <>
+//                     <div className="cartitem">
+//                       <figure>
+//                         <img
+//                           src={`/static/products/` + `${p.sku}` + `_1.jpg`}
+//                           alt="img"
+//                           className="cart-img"
+//                         />
+//                       </figure>
+
+//                       <p>{p.title}</p>
+//                       <p>{p.availableSizes}</p>
+//                       <p>
+//                         {p.currencyFormat} {p.price}
+//                       </p>
+//                       {this.state.increment === true ? (
+//                         <p>Qty:{p.Qty}</p>
+//                       ) : (
+//                         <p>Qty:{p.Qty}</p>
+//                       )}
+//                       {/* <p>Qty :{p.Qty}</p> */}
+//                       <button className="qty-btn" id={p.id} onClick={this.handleInc}>
+//                         {" "}
+//                         +{" "}
+//                       </button>
+//                       <button id={p.id} className="qty-btn" onClick={this.handleDec}>
+//                         {" "}
+//                         -{" "}
+//                       </button>
+//                     </div>
+//                   </>
+//                 );
+//               })}
+
+//               <p className="total">
+//                 SubTotal :{" "}
+//                 {[...new Set(this.props.info)].reduce((acc, cv) => {
+//                   acc = acc + cv.price * cv.Qty;
+//                   return acc;
+//                 }, 0)}
+//               </p>
+//             </div>
+//           )}
+//         </>
+//       </div>
+//     );
+//   }
+// }
+
+
 export default Cart;
